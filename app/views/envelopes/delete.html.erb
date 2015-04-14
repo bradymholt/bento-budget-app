@@ -1,0 +1,14 @@
+<% if @envelope.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @envelope.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@envelope, :html => { :method => :delete } ) do |f| %>
+<p>Deleting this envelope requires that you specify another envelope where to move <%= @envelope.name %> transactions to.</p>
+<%= f.label :delete_move_to_envelope_id, "Envelope to Move #{@envelope.name} Transactions to" %>
+<%= f.select(:delete_move_to_envelope_id, envelope_options(@envelope_groups, ""), :prompt => "--Select Envelope--", :class => 'envelope') %>
+<% end %>

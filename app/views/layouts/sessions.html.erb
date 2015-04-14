@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Bento Budget | Envelope System Budgeting Software</title>
+	<%= stylesheet_link_tag    "application" %>
+	<%= javascript_include_tag "application" %>
+	<%= csrf_meta_tags %>
+</head>
+<body class="sessions">
+	<div class="container">
+		<div class="row">
+			<div class="span4 offset4" id="inner-container">
+				<%= image_tag "logo-small.png" %>
+				<%= content_for?(:content) ? yield(:content) : yield %></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

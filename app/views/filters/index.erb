@@ -1,0 +1,53 @@
+<% if !@errors.blank? %>
+<div class="alert alert-error">
+	<ul>
+		<% @errors.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@user, :url => save_filters_path, :method=> 'post') do |f| %>
+<div id="filters-container">
+	<table id="filters-table" class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Transaction Name</th>
+				<th>Amount</th>
+				<th>Envelope</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			 <%= f.fields_for :transaction_filters do |t| %>
+			 <tr class="<%=t.object.is_template ? 'template' : 'filter'%>">
+			 	<td>
+					<%= t.text_field :search_text, :class => 'search_text' %>
+				</td>
+				<td>
+					<%= t.text_field :amount, :class => 'money', :value => number_with_precision(t.object.amount, :precision => 2) %>
+				</td>
+				<td>
+					<% if t.object.is_template %>
+					<%= t.select(:envelope_id, envelope_options(@envelope_groups, t.object.envelope_id), { :include_blank => "--Select Envelope--"}, :class => 'envelope') %>
+					<% else %>
+						<%= t.object.envelope.name_with_group %> 
+					<% end %>
+				</td>
+				<td>
+					<a class="delete" href="javascript:void(0);">Remove</a>
+						<%= t.hidden_field(:id) if !t.object.is_template %>
+						<%= t.hidden_field(:_destroy, :class=>'destroy', :value=> t.object.is_template ? '1' : '') %>
+				</td>
+			  </tr>	
+			 <% end %>
+		</tbody>
+	</table>
+</div>
+<button type="button" class="btn btn-small btn-success" id="filters-addnew">Add New</button>
+<%end%>
+<script type="text/javascript">
+	$(document).ready(function(){
+		TransactionFilters.init();
+	});
+</script>

@@ -1,0 +1,94 @@
+<% if @allocation.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @allocation.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<% if @is_new_account_balance %>
+<div class="alert alert-info">
+	The new account balance of <%= number_with_precision(@allocation.source_amount, :precision => 2, :delimiter => ',')%> needs to be allocated.  Simply specify how much should be allocated to each envelope below.
+</div>
+<% elsif @is_remove_account_balance %>
+<div class="alert alert-info">
+	The removed account balance of <%= number_with_precision(@allocation.source_amount.abs, :precision => 2, :delimiter => ',')%> needs to be allocated.  Simply specify how much of this balance should be removed from each envelope below.
+</div>
+</div>
+<% end %>
+<%= form_for(@allocation) do |f| %>
+	<div class="row-fluid">
+		<div class="span2">
+			<%= f.label :source_amount, "Amount" %>
+			<span id="allocation_amount" class="transaction-info"><%= number_with_precision(@allocation.source_amount, :precision => 2, :delimiter => ',')%></span>
+		</div>
+		<div class="span2">
+			<%= f.label :date %>
+			<%= f.hidden_field :date %> 
+			<%= text_field_tag "date", f.object.date.try(:strftime, '%m/%d/%Y'), :class=>'date' %>
+		</div>
+		<div class="span3">
+			<%= f.label :name, "Transaction name" %>
+			<%= f.text_field(:name) %>
+		</div>
+		<div class="span5">
+			<% if @allocation_plans.count > 0 && !@is_new_account_balance %>
+			<label for="plans">Allocation Plan</label>
+			<%= select_tag 'plans', options_from_collection_for_select(@allocation_plans, :id, :name)%>
+			<button class="btn btn-small" id="btn-plans-fill">Apply</button>
+			<% end %>
+		</div>
+	</div>
+	<div id="allocation-envelope-amounts-container">
+			<table class="table table-condensed table-hover">
+				<thead>
+					<tr><th></th><th>Current<br/>Balance</th><th>Monthly<br/>Budget</th><th id="funded-header">Allocated<br/>This Month</th><th>Remaining<br/>Amount</th><th></th><th class="money">Amount to<br/>Allocate Now</th></tr>
+				</thead>
+				<tbody>
+				<% last_envelope_group_id = nil %>
+				<% @envelopes.each do |e| %>
+				<% if last_envelope_group_id.nil? || last_envelope_group_id != e.envelope_group_id %>
+				<tr class="group">
+					<td colspan="7" class="group_name"><%= e.envelope_group.name %></td>
+				</tr>
+				<% end %>
+				<tr>
+					<td class="envelope_name"><%= e.name %></td>
+					<td class="balance <%= @balances[e.id] < 0 ? 'negative' : ''%>"><%=number_with_precision(@balances[e.id], :precision => 2, :delimiter => ',')%></td>
+					<td class="budget"><%=number_with_precision(@budgets[e.id], :precision => 2)%></td>
+					<td class="funded"></td>
+					<td class="remaining"></td>
+					<td><span class="fund_remaining badge badge-success">>></span></td>
+					<td class="money"><input type="text" class="money" envelope_id="<%=e.id%>" value="<%=number_with_precision(@allocation.envelope_amounts[e.id], :precision => 2)%>"/></td>
+				</tr>
+				<% last_envelope_group_id = e.envelope_group_id %>
+				<% end %>
+				</tbody>
+			</table>
+	</div>
+	<div class="row-fluid totals" id="allocation-totals">
+		<div class="span6 <%= !@allocation.new_record? ? 'alert' : '' %>">
+			<label for="unallocated-amount">Amount to Leave Unallocated</label>
+			<input type="text" class="money" envelope_id=<%= @unallocated_income_envelope.id %> id="unallocated-amount" value="<%=number_with_precision(@allocation.envelope_amounts[@unallocated_income_envelope.id], :precision => 2)%>"/>
+		</div>
+		<div class="span3">
+			<label for="total-allocated">Total Allocated:</label>
+			<span id="total-allocated" class="transaction-info"></span>
+		</div>
+		<div class="span3">
+			<label id="remaining-allocated-label" for="remaining-allocated">Remaining:</label>
+			<span id="remaining-allocated" class="transaction-info"></span>
+		</div>
+	</div>
+	<% if !@allocation.new_record? %>
+	<%= link_to 'Undo this Allocation', delete_allocation_path(@allocation), :class => 'open-modal', :data => { :button => "Delete" } %>
+	<% end %>
+<%= f.hidden_field(:source_transaction_ids) %>
+<%= f.hidden_field :envelope_amounts, :value => "" %>
+<% end %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		AllocationForm.init();
+	});
+</script>

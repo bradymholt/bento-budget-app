@@ -1,0 +1,30 @@
+ <fieldset>
+	 <legend><h1>Login</h1></legend>
+	  <% flash.each do |key, value| %>
+	    <div class="<%= flash_class(key) %>">
+	          <%= value %>
+	    </div>
+ 	  <% end %>
+	<%= form_tag sessions_path do %>
+	    <%= label_tag :email %>
+	    <%= text_field_tag :email, params[:email] %>
+	    <%= label_tag :password %>
+	    <%= password_field_tag :password %>
+	    <div>
+	  		<%= submit_tag "Login", :class => "btn" %>
+	  	</div>
+	<% end %>
+</fieldset>
+<hr/>
+<div class="pull-right">
+	<a href="<%=signup_path%>">Haven't signed up yet?</a>
+</div>
+<div >
+	<a href="<%=new_password_reset_path%>">Forgot your password?</a>
+</div>
+		
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#email').focus();	
+	});
+</script>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Demystifying Email Design</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<table border="0" cellpadding="0" cellspacing="0">	
+		<tbody><tr>
+			<td style="padding: 10px 0 30px 0;">
+				<table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+					<tbody><tr>
+						<td align="center" style="border-bottom: solid 1px #cccccc; padding: 10px 0 10px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif; text-align:left;">
+							<img src="http://www.bentobudget.com/images/logo-small.png" alt="Bento Budget" style="display: block;">
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#ffffff" style="padding: 0px 30px 10px 30px;">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tbody>
+								<tr>
+									<td style="padding: 0px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
+										<p style="font-size:larger;"><strong><%= @user.name %>,</strong></p>
+										<%= yield %>
+										<p><%= link_to "Signin Now", signin_url %></p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										
+									</td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#c9c9c9" style="padding: 10px;">
+							<table border="0" cellpadding="0" cellspacing="0" width="100%">
+								<tbody><tr>
+									<td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
+										® <%= Time.now.year %>, Pivotal Logic Solutions<br>
+									</td>
+									<td align="right" width="25%">
+										
+									</td>
+								</tr>
+							</tbody></table>
+						</td>
+					</tr>
+					<tr>
+					<td style="padding-top:15px; color: #707070; font-style:italic;">
+						This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify the system manager. This message contains confidential information and is intended only for the individual named. If you are not the named addressee you should not disseminate, distribute or copy this e-mail. Please notify the sender immediately by e-mail if you have received this e-mail by mistake and delete this e-mail from your system. If you are not the intended recipient you are notified that disclosing, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited.
+					</td>
+				</tr>
+				</tbody></table>
+			</td>
+		</tr>
+	</tbody></table>
+
+</body></html>

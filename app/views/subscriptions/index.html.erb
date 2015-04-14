@@ -1,0 +1,67 @@
+<div class="container">
+	<h2>
+		<div style="float: right;">
+	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick">
+	<% if !@user.is_trial_period_used %>
+	<input type="hidden" name="hosted_button_id" value="GM9ANW4P666FL">
+	<% else %>
+	<input type="hidden" name="hosted_button_id" value="TDS7CP8GM6ZC2"> 
+	<% end %>
+	<input type="hidden" name="custom" value="<%=@user.id%>">
+	<input type="hidden" name="cancel_return" value="<%=root_url%>" id="id_cancel_return">
+	<% if !@user.is_subscriber %>
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+	<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+	<% end %>
+	</form>
+	</div>
+		Upgrade to a Bento Budget Pro!</h2>
+	<table class="table table-striped">
+		<tr>
+			<th></th>
+			<th>Free</th>
+			<th>Pro
+				<div class="price">$3.99/month</div>
+				<% if !@user.is_trial_period_used %>
+				<div class="price"><span class="label label-success">1 month free trial</span></div>
+				<% end %>
+			</th>
+		</tr>
+		<tr>
+			<td class="benefit">Unlimited Envelopes</td>
+			<td><span class="green-check"></span></td>
+			<td><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Unlimited Accounts</td>
+			<td><span class="green-check"></span></td>
+			<td><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Budget</td>
+			<td><span class="green-check"></span></td>
+			<td><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Reports</td>
+			<td></td>
+			<td class="pro-benefit"><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Linked Accounts</td>
+			<td></td>
+			<td class="pro-benefit"><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Transaction Filters</td>
+			<td></td>
+			<td class="pro-benefit"><span class="green-check"></span></td>
+		</tr>
+		<tr>
+			<td class="benefit">Email Support</td>
+			<td></td>
+			<td class="pro-benefit"><span class="green-check"></span></td>
+		</tr>
+	</table>
+</div>

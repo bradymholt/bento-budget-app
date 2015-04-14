@@ -1,0 +1,68 @@
+<% if @income.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @income.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@income) do |f| %>
+	<div class="row-fluid">
+		<div class="span4">
+			<%= f.label :name%>
+			<%= f.text_field :name %>
+			<div>
+				<span class="help-block">e.g. John's Salary</span>
+			</div>
+		</div>
+		<div class="span2">
+			<%= f.label :amount%>
+			<%= f.text_field(:amount, :value => number_with_precision(@income.amount, :precision => 2), :class => 'money noAbs')%>
+		</div>
+		<div class="span6">
+			<%= f.label :income_frequency_id, "Frequency" %>
+			<%= f.select :income_frequency_id, options_from_collection_for_select(@income_frequencies, :id, :name, @income.income_frequency_id), {}, { :size => 4} %>
+		</div>
+	</div>
+	<div id="income_allocation_method" class="hidden">
+		<hr/>
+		<p>How would you like to allocate this income?</p>
+		<% @allocation_methods.each do |ap| %>
+		 <label class="radio" income_frequency_id="<%=ap.income_frequency_id%>">
+		  <%= f.radio_button :allocation_method_id, ap.id, { :default => ap.is_default } %>
+		  <strong><%= ap.name %></strong>
+		  <% if ap.is_default %>
+		  	<span class="label label-info">Recommended</span>
+		  <% end %>
+		  <% if !ap.description.blank? %>
+		  <div>
+		  	<span class="help-block"><%=ap.description %></span>
+		  </div>
+		  <% end %>
+		 </label>
+		<% end %>
+	</div>
+	<% if @income.grouped_incomes.size > 0 %>
+		<hr/>
+		The following incomes are currently grouped with this income:
+		<ul>
+		<% @income.grouped_incomes.each do |i| %>
+			<li><strong><%=i.name%></strong></li>
+		<% end %>
+	<% end %>
+	<div id="income_allocation_grouping" class="hidden">
+		<hr/>
+		<p>There are other income(s) with the same allocation method which gives you the ability to group this income with another income.  If you would like to group income allocations, select the associated income below. </p>
+			<%= f.select :allocation_method_grouped_with_income_id, options_for_select(@other_incomes.collect { |i| [ i.name, i.id, {income_allocation_method_id: i.allocation_method_id }]}, @income.allocation_method_grouped_with_income_id), :include_blank => '--Not Grouped--' %>
+	</div>
+<% if !@income.new_record? %>
+<hr/>
+<%= link_to 'Delete this Income', delete_income_path(@income), :class => 'open-modal', :data => {:title => "Delete Income", :button => "Delete" } %>
+<% end %>
+<% end %>
+<script type="text/javascript">
+$(document).ready(function() {
+	IncomeForm.init();	
+});
+</script>	

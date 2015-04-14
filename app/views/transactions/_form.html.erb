@@ -1,0 +1,97 @@
+<% if @transaction.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @transaction.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@transaction) do |f| %>
+<div class="row-fluid">
+		<div class="span2">
+			<%= f.label :date %>
+			<%= f.hidden_field :date %> 
+			<%= text_field_tag "date", f.object.date.try(:strftime, '%m/%d/%Y'), :class=>'date' %>
+		</div>
+		<div class="span4">
+			<%= f.label(:name) %>
+			<%= f.text_field(:name) %>
+		</div>
+		<div class="span6">
+			<%= f.label :account_id %>
+			<% if @transaction.new_record? %>
+				<% if @accounts.length == 1 %>
+				<%= f.select(:account_id, options_from_collection_for_select(@accounts, :id, :name, @accounts[0].id)) %>
+				<% else %>
+				<%= f.select(:account_id, options_from_collection_for_select(@accounts, :id, :name, @transaction.account_id), :include_blank => '--Select Account--') %>
+				<% end %>
+			<% elsif !@transaction.account_id.nil? %>
+			  	<span id="transaction_account_id"><%= @transaction.account.name%></span>
+			 <% end %>
+		</div>
+</div>
+<div class="row-fluid">
+	<div class="span2">
+		<%= f.label :amount %>
+		<% if @transaction.can_edit_amount? %>
+			<%= f.text_field(:amount, :value => (@transaction.new_record? ? nil : number_with_precision(@transaction.amount.abs, :precision => 2)), :class => 'money') %>
+		<% else %>
+			<%= f.hidden_field(:amount, :disabled => true) %>
+			<span class="transaction-info <%=@transaction.amount < 0 ? "negative" : ""%>" id="transaction_amount"><%=number_with_precision(@transaction.amount.abs, :precision => 2)%></span>
+		<% end %>
+	</div>
+	<div class="span10">
+		<label for="type_group">Type</label>
+		<div class="btn-group" id="type_group">
+		  <button type="button" id="type_debit" data-active-class="btn-danger" data-value="<%=Transaction::TYPES[:debit]%>" class="type_button btn btn-danger btn-small">Debit</button>
+		  <button type="button" id="type_deposit" data-active-class="btn-primary" data-value="<%=Transaction::TYPES[:deposit]%>" class="type_button btn btn-small">Deposit</button>
+		  <button type="button" id="type_income" data-active-class="btn-success" data-value="<%=Transaction::TYPES[:income]%>" class="type_button btn btn-small">Income</button>
+		</div>
+		<%= f.hidden_field :transaction_type %>
+	</div>
+</div>
+<div id="income_instructions" class="alert hidden">
+	Since this transaction is marked as Income, it will be assigned to your Unallocated Income envelope.  To allocate your income, you can go to the Unallocated Envelope.
+</div>
+<div id="transaction-envelope-amounts-container">
+	<table id="transaction-envelope-amounts" class="table table-striped table-condensed">
+		<thead>
+				<tr><th>Envelope</th><th>Notes</th><th>Amount</th><th></th></tr>
+				</thead>
+				<tbody>
+					<% @transaction.envelope_amounts.each do |envelope_amount| %>
+					<tr>
+						<td><%= select_tag '', envelope_options(@envelope_groups, envelope_amount[:envelope_id]), :prompt => "--Select Envelope--", :class => 'envelope' %>
+						</select>
+						</td>
+						<td><input type="text" class="notes" value="<%=envelope_amount[:notes]%>"/></td>
+						<td><input type="text" class="money" value="<%=number_with_precision(envelope_amount[:amount], :precision => 2)%>"/></td>
+						<td><a href="javascript:void(0);" class="remove">Remove</a>
+					</tr>
+					<% end %>
+			</tbody>
+	</table>
+</div>
+<button type="button" class="btn btn-small btn-success" id="transaction-envelope-amounts-add">Add Split</button>
+<div class="row-fluid totals" id="transaction-totals">
+	<div class="span4 offset4">
+		<label for="total-allocated">Total Allocated:</label>
+		<span id="total-allocated" class="transaction-info"></span>
+	</div>
+	<div class="span4">
+		<label id="remaining-allocated-label" for="remaining-allocated">Remaining:</label>
+		<span id="remaining-allocated" class="transaction-info"></span>
+	</div>
+</div>
+<% if !@transaction.new_record? %>
+<hr/>
+<%= link_to 'Delete this Transaction', delete_transaction_path(@transaction), :class => 'open-modal', :data => {:title => "Delete Transaction", :button => "Delete" } %>
+<% end %>
+<%= f.hidden_field :envelope_amounts, :value => "" %>
+<% end %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		TransactionForm.init(<%= @transaction.new_record? %>);
+	});
+</script>

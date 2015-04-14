@@ -1,0 +1,34 @@
+<h2>Funding vs. Spending</h2>
+<p>For a specified month, compares envelope funding to spending and shows the difference.  This report is helpful is reviewing which envelopes have spending that differs from the monthly budget.</p>
+<%= form_tag({:action => 'funding_spending_run'}, :remote => true) do %>
+<div class="row">
+	<div class="span3">
+		<label for="month">Month:</label>
+		<%= select_tag "month", options_for_select(@months) %>
+	</div>
+	<div class="span3">
+		<label for="run">&nbsp;</label>
+		<%= submit_tag("Run Report", :class => 'btn btn-success', :id => 'run') %>
+	</div>
+</div>
+<% end %>
+
+<div id="data">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("form")
+		.bind('ajax:success', function(event, data, status, xhr) {
+			$('#data').removeClass('loading').html(data);
+	  	})
+	  	.bind('ajax:error', function(xhr, status, error) {
+	  		console.log(status);
+	    });
+
+	 $('#run').click(function(){
+	 	$('#data').addClass('loading');
+	 });
+	
+});
+</script>

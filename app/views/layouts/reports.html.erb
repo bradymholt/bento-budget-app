@@ -1,0 +1,19 @@
+<% content_for :content do %>
+<div id="reports-left">
+	<ul class="nav nav-pills nav-stacked">
+		<%=action_nav_link('Envelope Spending', '/reports/envelope_spending') %> 
+		<%=action_nav_link('Envelope Group Spending', '/reports/envelope_group_spending') %> 
+		<%=action_nav_link('Funding vs. Spending', '/reports/funding_spending') %> 
+		<%=action_nav_link('Recurring Transactions', '/reports/recurring_transactions') %> 
+	</ul>
+</div>
+<div id="reports-right">
+	<%= yield %>
+</div>
+<% end %>
+<%= render template: "layouts/application" %>
+<script type="text/javascript">
+$(document).ready(function() {
+	Common.init();	
+});
+</script>	

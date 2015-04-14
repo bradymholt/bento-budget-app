@@ -1,0 +1,15 @@
+<fieldset>
+   <legend><h1>Reset Password</h1></legend>
+    <% flash.each do |key, value| %>
+      <div class="<%= flash_class(key) %>">
+            <%= value %>
+      </div>
+    <% end %>
+   <%= form_tag password_resets_path, :method => :post do %>
+      <%= label_tag :email %>
+      <%= text_field_tag :email, params[:email] %>
+      <div>
+        <%= submit_tag "Reset Password", :class => "btn" %>
+      </div>
+  <% end %>
+</fieldset>

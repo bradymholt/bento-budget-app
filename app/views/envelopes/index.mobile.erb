@@ -1,0 +1,32 @@
+<div data-role="page">
+	<div data-role="header" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+				<li><a data-theme="b" class="ui-btn-active ui-state-persist" href="<%=envelopes_path %>/">Envelopes</a></li>
+				<li><a href="<%= accounts_path(:format => :mobile)%>/">Accounts</a></li>
+				<li><a href="#login">Sign Out</a></li>
+				</ul>
+			</div>
+		</div>
+	<div data-role="content">	
+		<ul data-role="listview">
+			<% groupId = nil %>
+			<% @envelopes.each do |env|%>
+			<% if env.envelope_group_id != groupId %>
+				<li data-role="list-divider"><%=env.envelope_group.name%></li>
+			<% end %>
+			<li><a href="<%=envelope_transactions_path(env, :days => "90", :format => :mobile)%>/">
+				<%=env.name%>
+				<% if env.is_new_transactions_envelope? %>
+					<span class="ui-li-count"><%=env.transactions.count %></span>
+				<%else%>
+					<span class="ui-li-aside amount <%= env.balance < 0 ? "negative" : "" %>">
+						<%= number_with_precision(env.balance, :precision => 2, :delimiter => ',')%>
+					</span>
+				<% end %>	
+				</a></li>
+			<% groupId = env.envelope_group_id %>
+			<% end %>
+		</ul>
+	</div><!-- /content -->
+</div><!-- /page -->

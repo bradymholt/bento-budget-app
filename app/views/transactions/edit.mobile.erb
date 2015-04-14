@@ -1,0 +1,44 @@
+<div data-role="page">
+	<div data-role="header" data-theme="b">
+		<a href="<%= envelope_transactions_path(@transaction.envelope_id, :format => :mobile)%>/" data-icon="arrow-l">Back</a>
+		<h1>Edit Transaction</h1>
+	</div><!-- /header -->
+	<div data-role="content">	
+		<% if @transaction.errors.any? %>
+		<div class="alert alert-error">
+			<ul>
+				<% @transaction.errors.full_messages.each do |msg| %>
+				<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+		<% end %>
+		<%= form_for(@transaction, :format => :mobile) do |f| %>
+			<div data-role="fieldcontain">
+				<%= f.label :name %>
+				<%= f.text_field :name %>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="date" class="ui-input-text">Date</label> 
+				<span id="date"><%= @transaction.date.strftime("%m/%d/%Y")%></span>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="amount" class="ui-input-text">Amount</label> 
+				<span id="amount" class="<%= @transaction.amount < 0 ? "negative" : "" %>"><%= '%.2f' % @transaction.amount %></span>
+			</div>
+			<div data-role="fieldcontain">
+				<%= f.label :envelope_id %>
+				<%= f.select(:envelope_id, envelope_options(@envelope_groups, @transaction.envelope_id), { :include_blank => "--Select Envelope--"}, :class => 'envelope') %>
+			</div>
+			<div data-role="fieldcontain">
+				<%= f.label :notes %>
+				<%= f.text_area :notes %>
+			</div>
+			<fieldset class="ui-grid-a">
+				<div class="ui-block-a"><a href="<%= envelope_transactions_path(@transaction.envelope_id, :format => :mobile)%>/" data-role="button">Cancel</a></div>
+				<div class="ui-block-b"><button type="submit" data-theme="b">Save</button></div>	   
+			</fieldset>
+			
+		<% end %>
+	</div><!-- /content -->
+</div><!-- /page -->

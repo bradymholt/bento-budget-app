@@ -1,0 +1,70 @@
+<h2>Envelope Group Spending</h2>
+<p>Spending by envelope group over a specified period.</p>
+<%= form_tag({:action => 'envelope_group_spending_run'}, :remote => true) do %>
+<div class="row">
+	<div class="span3">
+		<label for="months_back">Period:</label>
+		<select id="months_back" name="months_back">
+			<%=options_for_select({
+				"Current month" => 0,
+				"Last month" => 1,
+				"Last 3 months" => 3,
+				"Last 6 months" => 6,
+				"Past Year" => 12
+				}, @months_back)
+			%>
+		</select>
+	</div>
+	<div class="span3">
+		<label for="run">&nbsp;</label>
+		<%= submit_tag("Run Report", :class => 'btn btn-success', :id => 'run') %>
+	</div>
+</div>
+<% end %>
+
+<div id="chart" style="height: 500px;">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("form")
+		.bind('ajax:success', function(event, data, status, xhr) {
+			$('#chart').removeClass('loading');
+	    	render(data);
+	  	})
+	  	.bind('ajax:error', function(xhr, status, error) {
+	  		console.log(error);
+	    });
+
+	$('#run').click(function(){
+	 	$('#chart').addClass('loading');
+	 });
+	
+});
+
+function render(data) {
+	var chartData = $.map(data, function(i){ 
+		return {"label":i.name, "data": i.amount};
+	});
+
+	var plot = $.plot('#chart', chartData, {
+		series: {
+			pie: {
+				show: true,
+				label: {
+                    show: true,
+                    radius: 1,
+                    formatter: function(label, series){
+                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>';
+                    },
+                    background: { opacity: 0.8 }
+                }
+			}
+		},
+		legend: {
+    		show: true,
+    		labelFormatter: function(label, series) { return label + " - " + Math.round(series.percent) + "%";}
+		}
+	});
+}
+</script>

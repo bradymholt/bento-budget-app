@@ -1,0 +1,15 @@
+<% if @group.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @group.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@group) do |f| %>
+	<%= f.label :name%>
+	<%= f.text_field :name %>
+	<hr/>
+	<%= link_to 'Delete this Group', delete_envelope_group_path(@group), :class => 'open-modal', :data => {:title => "Delete #{@group.name} Group", :button => "Delete" } %>
+<% end %>

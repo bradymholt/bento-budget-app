@@ -1,0 +1,102 @@
+<% if @account.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @account.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@account) do |f| %>
+	<div class="row-fluid">
+		<div class="span6">
+		  	<%= f.label :name %>
+			<%= f.text_field :name %>
+		</div>
+		<div class="span6">
+			<%= f.label :account_type %>
+			<%= f.select :account_type, options_from_collection_for_select(@types, :value, :name) %>
+		</div>
+	</div>
+	<% if !@account.initial_transaction.nil? %>
+	<%= fields_for @account.initial_transaction do |i| %>
+	<div class="row-fluid">
+		<div class="span6">
+			<%= i.label :balance, "Initial balance amount" %>
+			<%= number_with_precision(@account.initial_transaction.amount, :precision => 2, :delimiter => ',') %>
+		</div>
+		<div class="span6">
+			<%= i.label :date, "Initial balance date" %>
+			<%= @account.initial_transaction.date.try(:strftime, '%m/%d/%Y') %>
+		</div>
+	</div>
+	<% end %>
+	<% end %>
+	<% if @account.linked? %>
+	<fieldset id="linked-fields">
+		<legend>Linked Account Settings</legend>
+		<div class="row-fluid">
+			<div class="span4">
+				<%= f.label :bank_id %>
+				<%= f.select(:bank_id, options_from_collection_for_select(@banks, :id, :name, @account.bank_id), :include_blank => '--none--') %>
+			</div>
+			<div class="span6">
+				<label>Last Update Status</labe>
+				<div>
+					<% if @account.linked_last_attempt_error == true %>
+					<span class="label label-important">Error</span> - <%= @account.linked_last_error_message %>
+					<% elsif !@account.linked_last_success_date.nil?%>
+					<span class="label label-success">Success</span> - <%= @account.linked_last_success_date.strftime('%m/%d/%Y %I:%M%p') %>
+					<% end %>
+				</div>
+			</div>
+			<div class="span2">
+				<a class="open-modal" href="<%=linked_import_imports_path%>" data-title="Update Linked Accounts">Update Now</a>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				<%= f.label :linked_user_id, "Username" %>
+				<%= f.text_field :linked_user_id %>
+			</div>
+			<div class="span4">
+				<%= f.label :linked_password_new, "Password" %>
+				<%= f.password_field :linked_password_new, :value => @account.linked_password_new  %>
+			</div>
+			<div class="span4">
+				<%= f.label :linked_security_answers, "Security Answer(s)" %>
+				<%= f.text_field :linked_security_answers %>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span4">
+				<%= f.label :linked_account_number, "Account Number" %>
+				<%= f.text_field :linked_account_number %>
+			</div>
+			<div class="span4">
+				<%= f.label :linked_bank_code, "Bank ID" %>
+				<%= f.text_field :linked_bank_code %>
+			</div>
+		</div>
+	</fieldset>
+	<% end %>
+	<% if !@account.new_record? %>
+	<hr/>
+		<div class="pull-right">
+		<% if !@account.linked? %>
+			<%= link_to 'Convert to Linked Account', convert_to_linked_account_path(@account), :class => 'open-modal', :data => {:title => "Convert #{@account.name} to Linked Account" } %>
+		<% else %>
+			<a class="link" id="unlink-account">Unlink Account</a>
+		<% end %>
+		</div>
+		<div class="pull-left">
+		<%= link_to 'Remove this Account', delete_account_path(@account), :class => 'open-modal', :data => {:title => "Remove #{@account.name} Account", :button => "Remove Account" } %>
+		</div>
+	<% end %>
+<% end %>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		AccountEditForm.init();
+	});
+</script>

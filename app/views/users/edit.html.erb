@@ -1,0 +1,78 @@
+<div class="container">
+	<% if @user.errors.any? %>
+	<div class="alert alert-error">
+		<ul>
+			<% @user.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+			<% end %>
+		</ul>
+	</div>
+	<% end %>
+	<% flash.each do |key, value| %>
+      <div class="<%= flash_class(key) %>">
+          <%= value %>
+      </div>
+	<% end %>
+	<%= form_for @user, :url => settings_path do |f| %>
+	<div class="row">
+		<div class="span4">
+			<fieldset>
+			<legend>Account</legend>
+				<%= f.label :name %>
+				<%= f.text_field :name %>
+				<%= f.label :email %>
+				<%= f.text_field :email %>
+				<%= f.label :password, "New password" %>
+				<%= f.password_field :password %>
+				<%= f.label :password_confirmation, "New password confirmation" %>
+				<%= f.password_field :password_confirmation %>
+				<%= f.label :time_zone %>
+				<%= time_zone_select(:user, :time_zone) %>
+				<div>
+				<a href="<%=delete_user_path%>">Delete Account</a>
+				</div>
+			</fieldset>
+		</div>
+		<div class="span4">
+			<fieldset>
+				<legend>Notifications</legend>
+				<label class="checkbox">
+		        <input type="checkbox" id="new-transactions-notify" %>
+		        	Send Email Notification For New Transactions
+		      	</label>
+		      	<div id="new-transactions-notify-weeks" class="checkbox_dependent">
+		       	<span class="help-inline">when there are</span>
+		       		<%= f.select(:new_transaction_count_notify, User::NOTIFY_TRANSACTION_COUNT_OPTIONS, { :include_blank => '--' }, :data => { :default => User::NOTIFY_TRANSACTION_COUNT_DEFAULT } )%>
+		     	 <span class="help-inline">new transactions needing assignment</span>
+			</fieldset>
+		</div>
+		<div class="span4">
+			<fieldset>
+				<legend>Subscription</legend>
+				<% if @user.is_subscriber %>
+					<p class="green">You have a Pro subscription.  Thank you!</p>
+					<p>If you would like to cancel your subscription, you can click the button below.</p>
+					<div class="text-center">
+						<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=TTDSPQUBPJ2V6">  
+  					<img border="0" src="https://www.paypal.com/en_US/i/btn/btn_unsubscribe_LG.gif"></a> 
+  					</div>
+				<% else %>
+					<p class="red">You have not upgraded.</p>
+					<p>Upgrading will give you access to additional features!</p>
+					<div class="text-center">
+						<a class="btn btn-primary" href="<%=upgrade_path%>">Upgrade to Pro Now</a>
+					</div>
+				<% end %>
+			</fieldset>
+		</div>
+	</div>
+	<div class="form-actions text-center">
+	<%= f.submit "Save Settings", :class => "btn btn-success btn-large" %>
+	</div>
+	<% end %>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		UserEdit.init();
+	});
+</script>

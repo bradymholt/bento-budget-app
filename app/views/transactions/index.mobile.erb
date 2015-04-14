@@ -1,0 +1,22 @@
+<div data-role="page">
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<a href="<%= envelopes_path(:format => :mobile)%>/" data-icon="arrow-l">Back</a>
+		<h1>Transactions</h1>
+	</div><!-- /header -->
+	<div data-role="content">	
+		<ul data-role="listview">
+			<% @transactions.each do |t|%>
+			<li>
+				<% if !t.is_associated? %>
+					<a href="<%=edit_transaction_path(t, :format => :mobile)%>/">
+				<% end %>
+				<%=t.name%>
+				<span class="ui-li-aside amount <%= t.amount < 0 ? "negative" : "" %>"><%= number_with_precision(t.amount, :precision => 2, :delimiter => ',') %></span>
+				<% if !t.is_split_child? %>
+					</a>
+				<% end %>
+			</li>
+			<% end %>
+		</ul>
+	</div><!-- /content -->
+</div><!-- /page -->

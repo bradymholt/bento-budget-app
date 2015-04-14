@@ -1,0 +1,25 @@
+<% if @envelope.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @envelope.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@envelope) do |f| %>
+<div class="row-fluid">
+	<div class="span4">
+		<%= f.label :name %>
+		<%= f.text_field :name %>
+	</div>
+	<div class="span4">
+		<%= f.label :envelope_group_id %>
+		<%= f.select(:envelope_group_id, options_from_collection_for_select(@groups, :id, :name, @envelope.envelope_group_id), :include_blank => '--Select Group--') %>
+	</div>
+</div>
+	<% if !@envelope.new_record? %>
+	<hr/>
+	<%= link_to 'Delete this Envelope', delete_envelope_path(@envelope), :class => 'open-modal', :data => {:title => "Delete #{@envelope.name} Envelope", :button => "Delete" } %>
+	<% end %>
+<% end %>

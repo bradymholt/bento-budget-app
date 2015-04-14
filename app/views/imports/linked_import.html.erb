@@ -1,0 +1,11 @@
+<div id="import_linked_wait" class="alert alert-info hidden"></div>
+<div id="linked_accounts">
+	<%= render 'linked_accounts' %>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		LinkedImportForm.init(<%=@linked_accounts.length%>);
+	});
+</script>
+

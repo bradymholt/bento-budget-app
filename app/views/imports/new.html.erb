@@ -1,0 +1,41 @@
+<% if @import.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @import.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@import, :url => import_path(@import), multipart: true, :html => { :target => 'new_transaction_file_import_iframe' }) do |f| %>
+ 	<div class="row-fluid">
+ 		<div class="span6">
+		 	<%= f.label :account_id %>
+			<%= f.select(:account_id, options_for_select(@accounts.map{ |a| [a.name, a.id, {'data-initial_balance_date' => a.initial_transaction.try(:date_formatted) }] }), :include_blank => '--Select Account--') %>
+			<%= f.label :transaction_file %>
+			<%= f.file_field :transaction_file %>
+			<div class="well yellow hidden" id="initial_balance_date_notice">
+				Only transactions on or after this account's initial balance date of <strong><span id="initial_balance_date"></span></strong> will be imported.  Duplicate transactions will be ignored when possible.
+			</div>
+		</div>
+		<div class="span6 well">
+			You must first download a statement file from your bank and then upload it here.
+			<br/><br/>
+			<strong>The following file types are supported:</strong>
+			<ul>
+				<li>QFX - Quicken / Web Connect</li>
+				<li>OFX - Microsoft Money / Direct Connect</li>
+				<li>QIF - Quicken</li>
+				<li>CSV - Excel, Comma Separated Values</li>
+			</ul>
+		</div>
+	</div>
+<% end %>
+<iframe id="new_transaction_file_import_iframe" class="hidden" name="new_transaction_file_import_iframe">
+</iframe>
+
+<script type="text/javascript">
+	window.parent.jQuery(document).ready(function(){
+		window.parent.ImportForm.init();
+	});
+</script>

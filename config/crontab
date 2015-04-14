@@ -1,0 +1,1 @@
+0  2 * * * /bin/bash -l -c 'cd ~/app && RAILS_ENV=production bundle exec rake bot:all'

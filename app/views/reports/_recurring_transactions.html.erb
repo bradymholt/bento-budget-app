@@ -1,0 +1,15 @@
+<table id="data-table" class="table">
+	<thead>
+		<tr><th>Transaction Name</th><th>Account</th><th>Recurrance Count</th><th>Last Recurrance Date</th></tr>
+	</thead>
+	<tbody>
+		<%@data.each do |t| %>
+		<tr>
+			<td><%= t.name %></td>
+			<td><%= t.account_name %></td>
+			<td><%= t.recurrance_count %></td>
+			<td><%= t.last_recurrance_date.to_date.strftime('%m/%d/%Y')%></td>
+		</tr>
+		<% end %>
+	</tbody>
+<table>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Bento Budget</title>
+	<%= stylesheet_link_tag    "application" %>
+	<%= javascript_include_tag "application" %>
+	<%= csrf_meta_tags %>
+</head>
+<body class="<%= controller_name -%> <%= action_name -%>">
+	<div class="ui-layout-north" id="menu">
+		<div id="top-nav" class="navbar">
+		  <div class="navbar-inner">
+		    <a class="brand" href="<%=root_url%>"><%= image_tag "logo-xsmall.png"%></a>
+		    <ul class="nav pull-right">
+		    	<% if show_getting_started_nav? %>
+		    	<li id="nav-getting-started"><a target="_blank" href="http://www.bentobudget.com/help">Getting Started Help</a></li>
+		    	<% end %>
+		    	<% if !current_user.is_subscriber %>
+		    	<%=action_nav_link("Upgrade to Pro", upgrade_path) %>
+		    	<% end %>
+		    	<%=action_nav_link("Settings", settings_path) %>
+		    	<li><a target="_blank" href="http://www.bentobudget.com/help">Help</a></li>
+		    	<li><a target="_blank" href="https://bentobudget.uservoice.com">Feedback</a></li>
+				<li><%= link_to "Sign out", signout_path, :id => 'signout' %></li>
+		    </ul>
+		    <ul class="nav">
+		    	<%=controller_nav_link("Transactions", root_url) %>
+				<%=controller_nav_link("Budget", budgets_url) %>
+				<%=controller_nav_link("Reports", reports_url) %>
+		    </ul>
+		  </div>
+		</div>
+	</div>
+	<%= content_for?(:content) ? yield(:content) : yield %>
+	<div id="modal"></div>
+</body>
+</html>

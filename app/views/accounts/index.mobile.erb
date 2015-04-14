@@ -1,0 +1,22 @@
+<div data-role="page">
+	<div data-role="footer"> 
+			<div data-role="navbar">
+				<ul>
+				<li><a href="<%= envelopes_path(:format => :mobile)%>/">Envelopes</a></li>
+				<li><a data-theme="b" class="ui-btn-active ui-state-persist" href="<%= accounts_path(:format => :mobile)%>/">Accounts</a></li>
+				<li><a href="#login">Sign Out</a></li>
+				</ul>
+			</div>
+		</div>
+	<div data-role="content">	
+		<ul data-role="listview">
+			<% @accounts.each do |acct|%>
+			<li><%=acct.name%>
+				<span class="ui-li-aside amount <%= acct.balance < 0 ? "negative" : "" %>">
+					<%= number_with_precision(acct.balance, :precision => 2, :delimiter => ',')%>
+				</span>
+			</li>
+			<% end %>
+		</ul>
+	</div><!-- /content -->
+</div><!-- /page -->

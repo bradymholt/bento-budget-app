@@ -1,0 +1,9 @@
+body.sessions { 
+	legend h1 { text-align:center; font-size:smaller;}
+	fieldset { margin-left:40px;}
+	background-color: #e3f8d9;
+	background-image: asset-url("logo-background.png");
+	#inner-container { 
+		margin-top:50px; background-color:white; padding: 20px; border-radius:5px; border:solid 1px #848484;
+	}
+}

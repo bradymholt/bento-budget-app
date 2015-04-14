@@ -1,0 +1,43 @@
+<h2>Recurring Transactions</h2>
+<p>This report shows transactions that have occurred more than once and is helpful for determining spending habits and to track automatic payments.</p>
+<%= form_tag({:action => 'recurring_transactions_run'}, :remote => true) do %>
+<div class="row">
+	<div class="span3">
+		<label for="months_back">Period:</label>
+		<select id="months_back" name="months_back">
+			<%=options_for_select({
+				"Current month" => 0,
+				"Last month" => 1,
+				"Last 3 months" => 3,
+				"Last 6 months" => 6,
+				"Past Year" => 12
+				}, @months_back)
+			%>
+		</select>
+	</div>
+	<div class="span3">
+		<label for="run">&nbsp;</label>
+		<%= submit_tag("Run Report", :class => 'btn btn-success', :id => 'run') %>
+	</div>
+</div>
+<% end %>
+
+<div id="data">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("form")
+		.bind('ajax:success', function(event, data, status, xhr) {
+			$('#data').removeClass('loading').html(data);
+	  	})
+	  	.bind('ajax:error', function(xhr, status, error) {
+	  		console.log(status);
+	    });
+
+	 $('#run').click(function(){
+	 	$('#data').addClass('loading');
+	 });
+	
+});
+</script>

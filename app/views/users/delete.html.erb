@@ -1,0 +1,23 @@
+<div class="container">
+	<%= form_for(@user, :url => delete_user_path, :html => { :method => :delete } ) do |f| %>
+	<fieldset>
+		<legend>Delete Account</legend>
+		<% if @user.errors.any? %>
+		<div class="alert alert-error">
+			<ul>
+				<% @user.errors.full_messages.each do |msg| %>
+				<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+		<% end %>
+		<p>Are you sure you want to delete your account?  All of your data will be immediately deleted and your account removed from the system.  <span class="red">Account removal is immediate, permanent and cannot be undone!</span>.</p>
+		<p>If you want to continue with deleting your account, you will need to enter your password below.</p>
+		<%= f.label :password_confirmation, "Password" %>
+		<%= f.password_field :password_confirmation %>
+		<div class="form-actions text-center">
+			<%= f.submit "Delete My Account", :class => "btn btn-danger btn-large" %>
+		</div>
+	</fieldset>
+	<% end %>
+</div>

@@ -1,0 +1,17 @@
+<fieldset>
+   <legend><h1>Reset Password</h1></legend>
+    <% flash.each do |key, value| %>
+      <div class="<%= flash_class(key) %>">
+            <%= value %>
+      </div>
+    <% end %>
+   <%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+      <div>
+        <%= submit_tag "Update Password", :class => "btn" %>
+      </div>
+  <% end %>
+</fieldset>

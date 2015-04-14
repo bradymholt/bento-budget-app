@@ -1,0 +1,91 @@
+<h2>Envelope Spending</h2>
+<p>Spending by envelope over a specified period.</p>
+<%= form_tag({:action => 'envelope_spending_run'}, :remote => true) do %>
+<div class="row">
+	<div class="span3">
+		<label for="envelope_id">Envelope:</label>
+		<select id="envelope_id" name="envelope_id">
+			<%= option_groups_from_collection_for_select(@envelope_groups, :envelopes, :name, :id, :name) %>
+		</select>
+	</div>
+	<div class="span3">
+		<label for="months_back">Period:</label>
+		<select id="months_back" name="months_back">
+			<%=options_for_select({
+				"Current month" => 0,
+				"Last month" => 1,
+				"Last 3 months" => 3,
+				"Last 6 months" => 6,
+				"Past Year" => 12
+				}, @months_back)
+			%>
+		</select>
+	</div>
+	<div class="span3">
+		<label for="run">&nbsp;</label>
+		<%= submit_tag("Run Report", :class => 'btn btn-success', :id => 'run') %>
+	</div>
+</div>
+<% end %>
+
+<div id="chart" style="height: 500px;">
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("form")
+		.bind('ajax:success', function(event, data, status, xhr) {
+			$('#chart').removeClass('loading');
+	    	render(data);
+	  	})
+	  	.bind('ajax:error', function(xhr, status, error) {
+	  		console.log(status);
+	    });
+
+	 $('#run').click(function(){
+	 	$('#chart').addClass('loading');
+	 });
+	
+});
+
+function render(data){
+
+	var monthlySpendingData = $.map(data, function(i){ 
+		return [[i.month, parseFloat(i.sum)]] 
+	});
+	
+	var average = _.reduce(data, function(sum, i){ return sum + parseFloat(i.sum); }, 0) / data.length;
+	var averageData = $.map(data, function(i){ 
+		return [[i.month, parseFloat(average)]] 
+	});
+
+	var plot = $.plot('#chart',  [ 
+			{ data: monthlySpendingData, bars: { show: true, align: "center", 'barWidth': 15*24*60*60*1000} },
+			{ data: averageData, lines: { show:true }, color: '#3a75cf', label: 'Average' }
+		], {
+		xaxis: {
+      		mode: "time",
+      		tickSize: [1, "month"],
+      		timeformat: "%b %y"
+  		},
+  		yaxis: {
+  			tickDecimals:0,
+  			tickFormatter: function (val, axis) {
+   				return '$' + val + '.00';
+			}
+  		},
+  	    legend: { show: true,  labelFormatter: function(label, series) { return label + ' = $' + average.toFixed(2); } }
+  	});
+
+	//data labels
+  	$.each(plot.getData()[0].data, function(i, el){
+	  var o = plot.pointOffset({x: el[0], y: el[1]});
+	  $('<div class="data-point-label">$' + el[1].toFixed(0) + '</div>').css( {
+	    position: 'absolute',
+	    left: o.left - 10,
+	    top: o.top + 10,
+	    display: 'none'
+	  }).appendTo(plot.getPlaceholder()).fadeIn('slow');
+	});
+}
+</script>

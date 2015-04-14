@@ -1,0 +1,22 @@
+<table id="funding-spending" class="table">
+	<thead>
+		<tr>
+			<th>Group</th>
+			<th>Envelope</th>
+			<th>Funded</th>
+			<th>Spent</th>
+			<th>Difference</th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @data.each do |d| %>
+	<tr>
+		<td><%= d[:envelope_group_name] %></td>
+		<td><%= d[:envelope_name] %></td>
+		<td><%= number_with_precision(d[:funded], :precision => 2, :delimiter => ',') %></td>
+		<td><%= number_with_precision(d[:spent], :precision => 2, :delimiter => ',') %></td>
+		<td class="diff <%= d[:diff] < 0 ? 'negative' : 'positive'%>"><strong><%= number_with_precision(d[:diff], :precision => 2, :delimiter => ',') %></strong></td>
+	</tr>
+	<% end %>
+	</tbody>
+</table>

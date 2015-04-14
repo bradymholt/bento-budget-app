@@ -1,0 +1,12 @@
+#envelopes { cursor:pointer; 
+ 	li.group .group-name { background-color:#01bc5b; color: #FFFFFF; padding:3px; cursor:pointer;}
+ 	.envelope.ui-selected { background-color: #fcf8e3; font-weight:bold;}
+ 	ul.group-envelopes { margin: 0px; }
+ 	li.group, li.envelope { list-style: none; list-style-position: outside; }
+ }
+
+#envelope-tree { margin:0px; }
+#envelopes-container { padding: 3px; border:none;}
+.envelope.new-transactions { padding: 5px 0 5px 0;
+	.transaction-count { border: solid 1px black; padding: 0 5px 0 5px; }
+}

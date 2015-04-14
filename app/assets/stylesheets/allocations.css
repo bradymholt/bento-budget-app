@@ -1,0 +1,4 @@
+#allocation-envelope-amounts-container { height:350px; overflow:auto; }
+#allocation-envelope-amounts-container .fund_remaining { display: none; cursor: pointer; }
+#allocation_name { width: 150px;}
+#btn-plans-fill { margin-bottom: 9px;}

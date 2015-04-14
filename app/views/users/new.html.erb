@@ -1,0 +1,31 @@
+<fieldset>
+   <legend><h1>Signup</h1></legend>
+    <% if @user.errors.any? %>
+      <div class="alert alert-error">
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <%= form_for @user do |f| %>
+        <%= f.label :name, "Account name" %>
+        <%= f.text_field :name, :placeholder => "e.g. Smith Family" %>
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+        <%= f.hidden_field :time_zone %>
+        <div>
+          <%= f.submit "Signup", :class => "btn", data: { :disable_with => "Please wait..." } %>
+        </div>
+    <% end %>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function(){
+    UserNew.init();
+  });
+</script>

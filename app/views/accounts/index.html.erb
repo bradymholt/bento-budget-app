@@ -1,0 +1,23 @@
+<% if @accounts.length == 0 %>
+	<div class="alert alert-info text-center" id="no_acounts_alert">
+		--No Accounts--
+	</div>
+<% else %>	
+<ul id="account-tree">
+<% @accounts.each do |account| %>
+  <li class="account" account_id="<%=account.id%>">
+  	<div class="account-balance adjacent-right <%= (account.balance < 0) ? 'negative' : '' %>"><%= number_with_precision(account.balance, :precision => 2, :delimiter => ',')%></div>
+  	<div class="account-name adjacent-left">
+  		<% if account.linked_last_attempt_error %>
+  		<span class="badge badge-important">!</span>
+  		<% end %>
+      <% if account.linked? %>
+      <i class="icon-random"></i>
+      <% else %>
+       <i class="icon-download"></i>
+      <% end %>
+  		<%= account.name%></div>
+   </li>
+<% end %>
+</ul>
+<% end %>

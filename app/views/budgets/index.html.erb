@@ -1,0 +1,125 @@
+<div id="sidebar" class="ui-layout-west">
+	<div class="section-header">Income
+		<div class="pull-right">
+			<a id="new-income" data-title="New Income" href="<%= new_income_path %>" class="btn btn-mini open-modal">New</a>
+		</div>
+	</div>
+	<% if @incomes.size == 0 %>
+		<div class="alert alert-info">No incomes have been defined.  Adding income(s) will help you plan your monthly budget.</div>
+	<% else %>
+		<% @incomes.each do |i| %>
+			<div class="income">
+				<div class="adjacent-right"><%=number_with_precision(i.allocated_monthly, :precision => 2, :delimiter => ',')%></div>
+				<div class="adjacent-left"><strong><%=i.name%></strong></div>
+				<div class="income-detail">
+					Amount: <strong><%=number_with_precision(i.amount, :precision => 2, :delimiter => ',')%></strong><br/>
+					Frequency: <strong><%=i.income_frequency.name%></strong><br/>
+					Allocated: <strong><%=i.allocation_method.name%></strong>
+				</div>
+				<%= link_to 'Edit', edit_income_path(i), :class => 'open-modal hidden edit', :data => { :title => 'Edit Income' } %>
+			</div>
+		<% end %>
+		<div id="income-total" class="highlight">
+			<div class="adjacent-right"><span class="label label-success"><%=number_with_precision(@total_monthly_income, :precision => 2, :delimiter => ',')%></span></div>
+			<div class="adjacent-left"><strong>Total Monthly Income</strong></div>
+		</div>
+	<% end %>
+</div>
+<div id="budget-allocations" class="ui-layout-center">
+	<div class="section-header">Envelope Allocations
+	</div>
+	<table id="budget" class="table table-striped table-condensed allocation_plan_count_<%=@allocation_plans.size%>">
+		<thead>
+			<th class="envelope"><a href="#new_envelope_type_modal" data-title="New Envelope / Group" class="btn open-modal">New Envelope</a><%= render 'shared/new_envelope_or_group_modal' %></th>
+			<th class="budget">
+				Monthly Income Budget<br/>
+				<span class="label label-success budget-total"><%=number_with_precision(@total_allocated_monthly, :precision => 2, :delimiter => ',')%></span>
+			</th>
+			<% @allocation_plans.each do |plan| %>
+			<th class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%>" plan_id="<%=plan.id %>">
+				<%=plan.name%><br/>
+				<span class="label label-warning plan-total"><%=number_with_precision(plan.amount, :precision => 2, :delimiter => ',')%></span>
+				<% if plan.is_monthly_occurance_partial? %>
+				<div>
+					<span class="partial_note">
+						This check only counts <%=plan.monthly_occurance_partial_rational%> toward your monthly budget.
+						<a href="#partial_allocation_plan_help" data-title="Partial Check Allocation Explanation" class="open-modal">Why?</a>
+				</span>
+				<div id="partial_allocation_plan_help" class="hidden">
+					Since <strong>you only get this check <%=plan.monthly_occurance_partial_months%> months each year</strong>, this plan will only count <%=plan.monthly_occurance_partial_rational%> toward your monthly budget.  This allows a greater degree of flexibility in budget planning but if you would rather simplify and budget assuming the same number of checks each month, you can <a class="open-modal" data-title="Edit Income" href="<%=edit_income_path(plan.income_id)%>">edit the income</a> and change the way it is allocated.
+				</div>
+				<% end %>
+			</th>
+			<% end %>
+			<th class="diff">Difference<br/><a href="#budget_difference_explanation" data-title="Budget Difference" class="open-modal">[?]</a></th>
+		</thead>
+		<tbody>
+			<% @last_envelope_group_id = nil %>
+			<% @envelopes.each do |envelope| %>
+			<% if @last_envelope_group_id != envelope.envelope_group.id %>
+			<tr class="group">
+				<td class="group"><a class="open-modal" data-title="Edit Group" tabindex="-1" href="<%= edit_envelope_group_path(envelope.envelope_group)%>"><%= envelope.envelope_group.name %></a></td>
+				<td class="budget"></td>
+				<% @allocation_plans.each do |plan| %>
+				<td class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%>"></td>
+				<% end %>
+				<td class="diff"></td>
+			</tr>
+			<% end %>		
+			<tr class="envelope" envelope_id="<%=envelope.id%>">
+				<td class="envelope"><a class="open-modal" data-title="Edit Envelope" tabindex="-1" href="<%= edit_envelope_path(envelope)%>"><%= envelope.name%></a></td>
+				<td class="budget">
+					<%= text_field_tag("", number_with_precision(@budgets_by_envelope[envelope.id], :precision => 2), :class => 'money')%>
+				</td>
+				<% @allocation_plans.each do |plan| %>
+					<td class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%>">
+						<%= text_field_tag("", number_with_precision(plan.allocations_by_envelope[envelope.id], :precision => 2), :class=> 'money', 'plan_id' => plan.id, 'monthly_occurance' => plan.monthly_occurance)%>
+					</td>
+				<% end %>
+				<td class="diff negative"></td>
+			</tr>
+			<% @last_envelope_group_id = envelope.envelope_group.id %>
+			<% end %>
+		</tbody>
+		<tfoot>
+			<tr class="amount">
+				<td>Total Amount</td>
+				<td class="budget"></td>
+				<% @allocation_plans.each do |plan| %>
+					<td class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%>" plan_id="<%= plan.id %>"></td>
+				<% end %>
+				<td></td>
+			</tr>
+			<tr class="sum">
+				<td>Total Allocated</td>
+				<td class="budget"></td>
+				<% @allocation_plans.each do |plan| %>
+					<td class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%>" plan_id="<%= plan.id %>"></td>
+				<% end %>
+				<td></td>
+			</tr>
+			<tr class="diff">
+				<td>Difference <a href="#allocation_difference_explanation" data-title="Allocation Difference" class="open-modal">[?]</a></td>
+				<td class="budget negative"></td>
+				<% @allocation_plans.each do |plan| %>
+					<td class="plan <%=plan.is_monthly_occurance_partial? ? 'partial' : ''%> negative" plan_id="<%= plan.id %>"></td>
+				<% end %>
+				<td></td>
+			</tr>
+		</tfoot>
+	</table>
+	<div id="bottom-alert-container">
+		<div id="bottom-alert" class="alert alert-success"></div>
+	</div>
+</div>
+<div id="allocation_difference_explanation" class="hidden">
+	The difference between the total budget or allocation plan amount and how much has been allocated.  If there is a difference, you have either under or over allocated the total amount and should change the allocation amounts to remove the difference.
+</div>
+<div id="budget_difference_explanation" class="hidden">
+	The difference between your monthly budget and the total amount of income allocated for the month.  If there is a difference, this means you have either under or over allocated the monthly budget amount for a particular envelope.  To remove the difference, you should adjust the allocation amounts so that they total your monthly budget for a given envelope.
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	Budget.init();	
+});
+</script>	

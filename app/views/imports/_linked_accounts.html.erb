@@ -1,0 +1,37 @@
+<% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+          <%= value %>
+    </div>
+<% end %>
+<% if @linked_accounts.length == 0 %>
+	<div class="alert alert-info">
+		Your currently do not have any linked accounts available for update.  <a class="open-modal" href="#new_account_type_modal">Click Here</a> to add a new linked account.
+	</div>
+<% else %>	
+<table class="table table-striped" id="import_linked_table">
+	<thead>
+		<tr><th></th><th>Account</th><th>Last Status</th><th>Username</th><th>Password</th></tr>
+	</thead>
+	<tbody>
+		<%@linked_accounts.each do |a| %>
+		<tr account_id="<%=a.id%>">
+			<td><input type="checkbox" class="include" checked="checked"/></td>
+			<td><%= a.name %></td>
+			<td class="last_update"><% if a.linked_last_attempt_error == true %>
+				<span class="label label-important">Error</span> - <%= a.linked_last_error_message %>
+				<% elsif !a.linked_last_success_date.nil?%>
+				<span class="label label-success">Success</span> - <%= a.linked_last_success_date.strftime('%m/%d/%Y %I:%M%p') %>
+				<% end %>
+			</td>
+			<td><%= a.linked_user_id %></td>
+			<td><% if !a.linked_password.blank? %>
+				********
+				<% else %>
+				 <input class="password" type="password"/>
+				<% end %>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<% end %>

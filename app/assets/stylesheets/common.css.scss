@@ -1,0 +1,79 @@
+$green: #008942;
+$highlight: #fcf8e3;
+$odd-row-background-color: #f9f9f9;
+
+.negative,.red { color:red;}
+.positive, .green { color:green;}
+.highlight { background-color: $highlight;}
+.hidden { display:none; }
+input.date { width: 85px; }
+input.money { width:75px; }
+td.money,th.money { text-align:right; }
+.link { cursor: pointer; }
+
+.loading { background-image: asset-url("ajax-loader.gif"); background-position: 50% 50%; background-repeat: no-repeat; width:100%; min-height:50px; }
+.green-check { display:inline-block; width:28px; height:28px; background-image: asset-url("green-check.png"); background-position: 50% 50%; background-repeat: no-repeat; }
+span.link { padding:5px; }
+label.inline { display: inline-block;}
+
+.field_with_errors label { color: #b94a48;}
+.field_with_errors { padding:2px;}
+.field_with_errors input {background-color: #f2dede;}
+.field_with_errors .label { color:white;}
+.well.yellow { background-color: #fdffd0; }
+
+.section-header {
+	height: 25px;
+	background-color: $green; 
+	padding: 5px;
+	color:white;
+	line-height:25px;
+}
+
+.adjacent-left { overflow:hidden; text-overflow: ellipsis; white-space: nowrap; text-align:left; }
+.adjacent-right { float:right; text-align:right; white-space: nowrap;}
+
+.totals label { font-weight:bold; }
+.totals span { font-size:larger; }
+
+#top-nav {
+	height:25px; 
+	.nav > li.subscriptions_index { background-color:#75ae59; 
+		a { color:white; text-shadow:none; }
+	}
+	.nav > li.subscriptions_index.active {
+		a { color: black; }
+	}
+	.nav > li#nav-getting-started { background-color:#f9fa93; }
+	.nav li.active > a { color: #232323; font-weight:bold; text-transform:uppercase;}
+	.brand { padding: inherit; }
+}
+
+#bottom-alert-container { position: absolute; bottom: 30px; width: 100%; display:none; }
+#bottom-alert { width: 400px; margin: 0 auto; text-align:center;}
+
+/* jquery-ui overrides */
+.ui-state-hover { background-color: #A8B6FF;}
+.ui-widget-content a.btn {color:white;}
+.ui-widget-content a { color: blue;}
+.ui-widget { font-family: inherit;}
+.ui-widget-header { background:$green; color:white; font-weight: normal; border-radius:0px;}
+.ui-dialog .ui-dialog-buttonpane a.btn { margin: .5em .4em .5em 0; display:inline-block; }
+.ui-widget-overlay {
+	background: inherit;
+	background-color: #272727;
+	opacity: .6/*{opacityOverlay}*/;
+	filter: Alpha(Opacity=60)/*{opacityFilterOverlay}*/;
+}
+
+/* jquery-layout overrides */
+.ui-layout-pane { padding: 0 2px 0 2px; border:none;}
+
+/* bootstrap overrides */
+th { text-align:left; }
+#modal table { margin-bottom: 5px; }
+.hidden { visibility:visible;}
+
+/* jquery-ui / bootstrap colissions */
+.ui-widget button.btn-mini {font-size: 10.5px; font-family: inherit;}
+.ui-widget-content a.btn-success { color: white;}

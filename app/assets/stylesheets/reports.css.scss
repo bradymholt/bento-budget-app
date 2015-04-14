@@ -1,0 +1,15 @@
+#reports-left { 
+	float:left; 
+	padding:10px;
+	.active {font-weight:bold;} 
+	.nav-pills > .active, .nav-pills > .active > a, .nav-pills > .active > a:hover  { background-color: $green; border-radius: 5px;}
+}
+
+#reports-right { 
+	margin-left: 225px; 
+	padding:10px;  
+	border-left: solid 1px black; 
+}
+
+.data-point-label { font-size: smaller;}
+#funding-spending td.diff { font-size:larger;}

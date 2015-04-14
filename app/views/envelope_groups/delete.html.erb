@@ -1,0 +1,14 @@
+<% if @group.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @group.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@group, :html => { :method => :delete } ) do |f| %>
+<p>Deleting this group requires that you specify another group where to move envelopes that currently belong to it.</p>
+<%= f.label :delete_move_to_group_id, "Group to Move #{@group.name} Group Envelopes to" %>
+<%= f.select(:delete_move_to_group_id, options_from_collection_for_select(@assign_to_groups, :id, :name), :prompt => "--Select Group--") %>
+<% end %>

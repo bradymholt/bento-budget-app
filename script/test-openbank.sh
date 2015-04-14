@@ -1,0 +1,2 @@
+#curl --data "ofx_url=https://ofx.chase.com&fid=10898&org=B1&user_id=bradyholt1980&password=Brady4Katie&bank_id=111000614&account_id=5524755000500798&account_type=CREDITCARD&date_start=20140101&date_end=20140201" http://localhost:1234/ofx/statement
+#phantomjs scripts/1601_statement.js ~/dev/OpenBank/OpenBank/casperjs --user_id="bradyholt1980" --password="Brady4Katie" --account_id="436867642" --date_start="2014-01-01" --date_end="2014-02-01"

@@ -1,0 +1,21 @@
+#transactions-subheader {
+	background-color:#fcf8e3;	
+	padding:  5px;
+}
+
+#transactions .alert { margin-bottom:0px; }
+#transactions-table { width: 100%;}
+#transactions-table tr { cursor:pointer; }
+#transactions-table tr.ui-selected td { background-color: #A8B6FF;}
+.transaction-info { font-size:larger;}
+#transactions-list { min-height:100px;}
+
+/* edit */
+#transaction-envelope-amounts-container { max-height: 200px; overflow:auto;
+	.envelope_name { padding-left:10px;}
+}
+
+.table-condensed td.group_name { font-weight:bold; border-top:0px;}
+.table-condensed td.envelope_name { padding-left:10px; }
+
+#income_instructions { margin-top: 10px;}

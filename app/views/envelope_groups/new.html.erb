@@ -1,0 +1,21 @@
+<% if @group.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @group.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@group) do |f| %>
+	<div class="row-fluid">
+		<div class="span6">
+			<%= f.label :name, "Group name" %>
+			<%= f.text_field :name %>
+		</div>
+		<div class="span6">
+			<%= f.label :first_envelope_name %>
+			<%= f.text_field :first_envelope_name %>
+		</div>
+	</div>
+<% end %>

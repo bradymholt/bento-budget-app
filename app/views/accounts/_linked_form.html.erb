@@ -1,0 +1,77 @@
+<div id="linked_account_error" class="alert alert-error hidden"></div>
+<div id="linked_account_wait" class="alert alert-info hidden"></div>
+<%= form_for(@account, :html => { :id => "linked_account" }) do |f| %>
+<% if @account.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @account.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<fieldset id="linked_account_bank_info">
+	<legend>Provide Bank Information</legend>
+	<div class="row-fluid">
+		<div class="span6">
+			<%= f.label :bank_id %>
+			<%= f.select(:bank_id, grouped_options_for_select(@grouped_banks, @account.bank_id), :include_blank => '--select--') %>
+			<div id="bank_notes" class="well hidden">
+			</div>
+			<div id="bank_standard_ofx_note" class="well hidden">
+				A secure connection to this bank is made through an <a target="_blank" href="http://en.wikipedia.org/wiki/Open_Financial_Exchange">Open Financial Exchange (OFX)</a> interface which some banks also call "Quicken Direct Connect".  Some (but not all) banks require this feature to be explicitly enabled through their website and/or charge a fee for this service to be enabled.
+			</div>
+		</div>
+		<div class="span6">
+			<label for="account_linked_user_id">Username:</label>
+			<%= f.text_field :linked_user_id %>
+			<label for="account_linked_password">Password:</label>
+			<%= f.password_field :linked_password %>
+			<label class="checkbox">
+				<input type="checkbox" id="save_password" checked="checked"> Save Password
+			</label>
+			<span class="help-block">Saving your password allows transactions to be automatically downloaded each day.</span>
+		</div>
+	</div>
+</fieldset>
+<fieldset id="linked_account_security_question" class="hidden">
+	<legend>Answer Security Question</legend>
+	<p id="security_question"></p>
+	<label for="account_linked_security_answers">Answer:</label>
+	<%= f.text_field :linked_security_answers %>
+</fieldset>
+<fieldset id="linked_account_select_account" class="hidden">
+	<legend>Select Bank Account</legend>
+	<label for="ofx_bank_accounts">Account</label>
+	<select id="ofx_bank_accounts">
+	</select>
+</fieldset>
+<% if @account.new_record? %>
+<fieldset id="linked_account_confirm" class="hidden">
+	<legend>Step 3: Confirm And Finish</legend>
+	<%= f.label :name %>
+	<%= f.text_field :name %>
+	<div class="row-fluid">
+		<div class="span3">
+			<div><%= f.label :initial_balance_amount, :id => "account_initial_balance_label" %></div>
+			<%= f.text_field :initial_balance_amount, :class => "money noAbs" %>
+		</div>
+		<div class="span9">
+			<%= f.label :initial_balance_date %>
+			<%= f.hidden_field :initial_balance_date %> 
+			<%= text_field_tag "new_account_date", f.object.initial_balance_date.try(:strftime, '%m/%d/%Y'), :class=>'date' %>
+		</div>
+	</div>
+</fieldset>
+<% end %>
+<%= f.hidden_field :account_type %>
+<%= f.hidden_field :linked_account_number %>
+<%= f.hidden_field :linked_bank_code %>
+<%= f.hidden_field :linked_initial_balance_bank_transaction_ids %>
+<input type="hidden" name="is_linked" value="1"/>
+<% end %>
+<script type="text/javascript">
+$(document).ready(function(){
+	AccountLinkedForm.init(<%= @account.new_record? ? 'true' : 'false' %>);
+});
+</script>

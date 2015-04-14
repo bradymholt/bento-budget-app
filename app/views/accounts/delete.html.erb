@@ -1,0 +1,14 @@
+<%= form_for(@account, :html => { :method => :delete } ) do |f| %>
+	<p>You have two options to remove the <strong><%=@account.name%></strong> account.  Please review the options below and indicate which removal type you would like to use before proceeding.
+		<ul>
+			<li><strong>Inactivate</strong> - <span class="label label-info">Recommended</span> The transactions for this account will be kept in your envelopes and a new <i>offsetting transaction</i> will be created which will need to be allocated across your envelopes.</li>
+			<li><strong>Delete</strong> - <span class="label label-warning">Caution</span> This account and all transactions attached to this account will be completely deleted.</li>
+		</ul>
+	</p>
+	<label for="removal_method">Removal Type</label>
+	<select name="inactivate" id="removal_method">
+		<option value="true" selected>Inactivate</option>
+		<option value="false">Delete</option>
+	</select>
+	
+<% end %>

@@ -1,0 +1,39 @@
+<% if @transfer.errors.any? %>
+<div class="alert alert-error">
+	<ul>
+		<% @transfer.errors.full_messages.each do |msg| %>
+		<li><%= msg %></li>
+		<% end %>
+	</ul>
+</div>
+<% end %>
+<%= form_for(@transfer) do |f| %>
+<div class="row-fluid">
+	<div class="span2">
+		<%= f.label :amount %>
+		<%= f.text_field :amount, :class => 'money', :value => number_with_precision(@transfer.amount, :precision => 2) %>
+		<%= f.label :date %>
+		<%= f.hidden_field :date %> 
+		<%= text_field_tag "date", f.object.date.try(:strftime, '%m/%d/%Y'), :class=>'date' %>
+	</div>
+	<div class="span4">
+		<%= f.label :from_envelope_id %>
+		<%= f.select(:from_envelope_id,  envelope_options(@envelope_groups, @transfer.from_envelope_id), { :include_blank => "--Select Envelope--"}, :class => 'envelope') %>
+		<%= f.label :to_envelope_id%>
+		<%= f.select(:to_envelope_id, envelope_options(@envelope_groups, @transfer.to_envelope_id), { :include_blank => "--Select Envelope--"}, :class => 'envelope') %>
+	</div>
+	<div class="span6">
+		<%= f.label :notes %>
+		<%= f.text_area :notes, :size => "24x2" %>
+	</div>
+</div>
+<hr/>
+	<% if !@transfer.new_record? %>
+	<%= link_to 'Delete this Transfer', delete_transfer_path(@transfer), :class => 'open-modal', :data => {:title => "Delete Transfer", :button => "Delete" } %>
+	<% end %>
+<% end %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		Transfer.init(<%= @transfer.new_record? %>);
+	});
+</script>

@@ -1,0 +1,17 @@
+<%= form_for(@transfer, :html => { :method => :delete } ) do |f| %>
+<p>Are you sure you want to delete this transfer?</p>
+	<table class="table">
+		<tr>
+			<th>Date</th>
+			<th>From Envelope</th>
+			<th>To Envelope</th>
+			<th>Amount</th>
+		</tr>
+		<tr>
+			<td><%=@transfer.date.strftime("%m/%d/%Y")%></td>
+			<td><%=@transfer.from_envelope.name%></td>
+			<td><%=@transfer.to_envelope.name%></td>
+			<td><%=number_with_precision(@transfer.amount, :precision => 2)%></td>
+		</tr>
+	</table>
+<% end %>

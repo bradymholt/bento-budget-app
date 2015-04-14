@@ -1,0 +1,19 @@
+body.subscriptions {
+ th { font-size:large; text-align: center;}
+ td { text-align: center;}
+ td.benefit { font-size:larger; text-align:left; }
+ tr td.pro-benefit { background-color: $highlight;}
+ .price {font-size:small;}
+}
+
+#subscription_checking {
+	border:solid 1px #aeaeae;
+	margin-top:30px;
+	padding-top:50px;
+	font-size:large;
+	width: 300px;
+	height:100px;
+	padding:20px;
+	margin: 0 auto;
+	text-align:center;
+}

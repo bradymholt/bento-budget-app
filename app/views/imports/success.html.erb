@@ -1,0 +1,6 @@
+<script type="text/javascript">
+	window.parent.jQuery(document).ready(function(){
+		window.parent.jQuery('#modal').dialog('close');
+		window.parent.Main.handle_json_response(<%=raw @data.to_json%>);
+	});
+</script>

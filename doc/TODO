@@ -1,0 +1,34 @@
+click accounts select first or show summary, funded/spent/net for current mont
+cannot move/reorder envelope into a group without other envelopes
+*****pending transactions
+special "transfers" envelope for account and envelope transfers.  don't include in reports
+one page glance of funded/spent with graphs or something like inzolo
+first login "hey you need to update your accounts now!"..maybe email notification too
+new transaction, run filters?
+? help links on budget, move to www/help
+better import like NeoBudget?
+screen size on allocation modal
+prevent autocomplete on linked account
+Update account status not updated and icon
+
+Low Priority
+============
+More email notifications
+remove data-title and set with js
+async email
+cloudfront / nginx static direct
+drag drop transactions with scroll envelope list
+Reconcile flag on transactions
+envelope group totals
+CSV import
+Multi edit/assign
+Reports - Spending by month (columns are months), start / end month
+Reports - look at inzolo reports
+Reports - download all
+Reports - print/export reports
+predict recurring transactions - "want to setup a filter"?, also add "did you know tip"
+daily tip, did you know?
+transaction search
+click on red ! on accounts take you to update screen immediately
+single allocation plan just use monthly budget???
+bulk envelope add (maybe)

@@ -1,0 +1,86 @@
+<div id="sidebar" class="ui-layout-west">
+	<div class="ui-layout-center">
+		<div class="section-header">
+			Envelopes
+			<div class="pull-right">
+				<a href="#new_envelope_type_modal" class="btn btn-mini open-modal" id="btn-envelope-new" data-title="New Envelope / Group">New</a>
+				<a href="<%= new_transfer_path %>" data-title="Envelope Transfer" class="btn btn-mini open-modal">Transfer</a>
+				<%= render 'shared/new_envelope_or_group_modal' %>
+			</div>
+		</div>
+		<div id="envelopes-container">
+			<div id="envelopes"></div>
+		</div>
+	</div>
+	<div class="ui-layout-south">
+		<div class="section-header">
+			Accounts
+			<div class="pull-right">
+				<a href="#new_account_type_modal" class="btn btn-mini open-modal" id="btn-account-new" data-title="Add New Account">New</a>
+				<a href="<%=imports_path%>" class="btn btn-mini open-modal" id="btn-account-auto-import" data-title="Update Accounts">Update</a>
+				<div class="hidden" id="new_account_type_modal">
+					<div id="new_account_type_modal_content">
+					<p>Please select an account type below.</p>
+					<hr/>
+						<div class="pull-right type-description">
+						Choose this account type if you prefer to login to your bank website, download transactions and then import them manually.
+						</div>
+						<a class="btn btn-large btn-success open-modal" href="<%=new_account_path%>" data-title="New Import Account"><i class="icon-download icon-white"></i>&nbsp;Import Account</a>
+					<hr/>
+						<div class="pull-right type-description">
+						Choose this account type if you would like to add a new account which is linked to your bank.  This will allow automatic download of transactions to save you time. <br/><span class="red">Not all banks support linked accounts.</span> 
+						</div>
+						<a class="btn btn-large btn-success <%=current_user.is_subscriber ? 'open-modal' : '' %>" href="<%=current_user.is_subscriber ? new_linked_accounts_path : upgrade_path %>" data-title="New Linked Account"><i class="icon-random icon-white"></i>&nbsp;Linked Account</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="accounts-container">
+			<div id="accounts"></div>
+		</div>
+	</div>
+</div>
+<div class="ui-layout-center" id="transactions">
+	<div class="section-header">
+		<span id="transactions-title"></span>
+		<div class="pull-right">
+			<a href="<%= new_transaction_path %>" id="btn-new-transaction" data-title="New Transaction" class="btn btn-mini open-modal">New</a>
+			<a href="<%= new_import_path %>" data-title="Import Transactions" class="btn btn-mini open-modal" data-button="Import">Import</a>
+			<button type="button" class="btn btn-mini" data-title="Edit Transaction" id="btn-edit">Edit</button>
+			<% if current_user.is_subscriber %>
+			<a href="<%= filters_path %>" class="btn btn-mini open-modal" data-button="Save and Run" data-title="Transaction Filters">Filters</a>
+			<% else %>
+			<a href="<%=upgrade_path%>" class="btn btn-mini">Filters</a>
+			<% end %>
+		</div>
+	</div>
+	<div id="transactions-subheader" class="row-fluid">
+		<div class="span4">
+		<label id="days-label" for="days" class="inline">Date limit:</label>
+			<select id="days" class="btn btn-mini">
+				<option selected value="30">30 days back</option>
+				<option value="90">3 months back</option>
+				<option value="180">6 months back</option>
+				<option value="365">1 year back</option>
+				<option value="">(No Limit)</option>
+			</select>
+		</div>
+		<div class="hidden span8">
+			<a href="<%=new_allocation_path%>" class="btn btn-success open-modal hidden" id="btn-allocate" data-title="Allocate Income" data-button="Allocate">Allocate Income Now</a>
+		</div>
+	</div>
+	<div id="transactions-list" class="loading">
+	</div>
+	<div id="bottom-alert-container">
+		<div id="bottom-alert" class="alert"></div>
+	</div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	Main.init();	
+});
+</script>	
+<%=current_user.sign_in_count%>
+<% if show_welcome? %>
+		<%= render 'welcome' %>
+<% end %>

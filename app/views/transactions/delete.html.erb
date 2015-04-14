@@ -1,0 +1,21 @@
+<%= form_for(@transaction, :html => { :method => :delete } ) do |f| %>
+<% if !@transaction.import_id.nil? %>
+		<div class="alert alert-block">
+		<h4>Warning!</h4>
+		This transaction was automatically imported which means it came directly from your bank statement.  You may still delete it but your account balance may no longer correctly reflect your bank statement.
+		</div>
+	<% end %>
+<p>Are you sure you want to delete this transaction?</p>
+	<table class="table">
+		<tr>
+			<th>Date</th>
+			<th>Name</th>
+			<th>Amount</th>
+		</tr>
+		<tr>
+			<td><%=@transaction.date.strftime("%m/%d/%Y")%></td>
+			<td><%=@transaction.name%></td>
+			<td><%=number_with_precision(@transaction.amount, :precision => 2)%></td>
+		</tr>
+	</table>
+<% end %>

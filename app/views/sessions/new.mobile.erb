@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bento Budget</title>
+  <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
+  <!--Omit width=device-width for iPhone 5 -->
+  <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" />
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <link rel="apple-touch-icon" href="<%=image_path('iPhoneIcon_Small.png')%>" />
+  <link rel="apple-touch-icon" sizes="72x72" href="<%=image_path('iPhoneIcon_Medium.png')%>" />
+  <link rel="apple-touch-icon" sizes="114x114" href="<%=image_path('iPhoneIcon_Big.png')%>" />
+  <link rel="stylesheet" href="//code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+  <%= stylesheet_link_tag "mobile" %>
+  <script src="//code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="//code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+  <script type="text/javascript">
+    $(document).on("mobileinit", function(){
+      //$.mobile.defaultPageTransition = 'slide';
+    });
+    $(document).on('pagehide', function (e) {
+      //prevent first page from being cached
+      var page = $(e.target);
+      if (!$.mobile.page.prototype.options.domCache
+          && (!page.attr('data-dom-cache')
+              || page.attr('data-dom-cache') == "false")
+          ) {
+          page.remove();
+      }
+    });
+  </script>
+</head>
+<body>
+<div id="login" data-role="page">
+	<div data-role="header">
+		<h1>Bento Budget</h1>
+	</div><!-- /header -->
+	<div data-role="content">	
+		<% flash.each do |key, value| %>
+	    <div class="<%= flash_class(key) %>">
+	          <%= value %>
+	    </div>
+ 	    <% end %>
+		<%= form_tag sessions_path(:format => :mobile)  do  %>
+		  <%= label_tag :email %>
+	      <%= text_field_tag :email, params[:email] %>
+		  <%= label_tag :password %>
+	      <%= password_field_tag :password %>
+		  <%= submit_tag "Sign in" %>
+		<% end %>
+	</div><!-- /content -->
+</div><!-- /page -->
+</body>
+</html>
+

@@ -1,0 +1,46 @@
+<% if @transactions.length == 0 %>
+	<div class="alert alert-info text-center">
+		--No Transactions--
+	</div>
+<% else %>	
+<table id="transactions-table" class="table table-condensed table-striped <%= @is_unallocated_income_envelope ? 'unallocated_income' : '' %>">
+	<thead>
+	<tr>
+		<% if @is_unallocated_income_envelope %>
+		<th></th>
+		<% end %>
+		<th class="type-string">Date</th>
+		<th class="type-string">Name</th>
+		<th class="type-string">Notes</th>
+		<% if @account_column_visible %>
+			<th class="type-string">Account</th>
+		<% end %>
+		<% if @envelope_column_visible %>
+			<th class="type-string">Envelope</th>
+		<% end %>
+		<th class="money type-float">Amount</th>
+		<th class="money type-float">Balance</th>
+	</tr>
+	</thead>
+	<tbody>
+		<% @transactions.each do |transaction| %>
+		<tr transaction_id="<%=transaction.id%>">
+			<% if @is_unallocated_income_envelope %>
+			<td><input type="checkbox" class="allocate_check" checked="checked"></input></td>
+			<% end %>
+			<td><%=transaction.date.strftime("%m/%d/%Y")%></td>
+			<td class="name"><%=transaction.name%></td>
+			<td class="notes"><%=transaction.notes%></td>
+			<% if @account_column_visible %>
+			<td><%= !transaction.account.nil? ? transaction.account.name : '' %></td>
+			<% end %>
+			<% if @envelope_column_visible %>
+			<td><%= !transaction.envelope.nil? ? transaction.envelope.name : '' %></td>
+			<% end %>
+			<td class="money <%= transaction.amount < 0 ? 'negative' : '' %>"><%=number_with_precision(transaction.amount, :precision => 2, :delimiter => ',')%></td>
+			<td class="money <%= transaction.rolling_balance < 0 ? 'negative' : '' %>"><%=number_with_precision(transaction.rolling_balance, :precision => 2, :delimiter => ',')%></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<% end %>

@@ -1,0 +1,49 @@
+$budget_column_background_color: #c7ffcf;
+$partial_plan_background_color: #95bff2;
+
+body.budgets {
+	legend { margin-bottom: 5px; }
+	table { width: 100%;}
+}
+
+#budget { 
+	input.money { width: 55px; }
+
+	tr.envelope {
+		td,th { }
+	}
+	td.diff,th.diff, tr.diff {font-weight:bold; text-align:center;}
+	tr.group td { font-size:larger; font-weight:bold; border-top: 0px; }
+	td.plan, th.plan, th.diff { text-align:center; width: 100px;}
+	td.plan.partial, th.plan.partial { width:200px;}
+	th.envelope { vertical-align:middle; font-weight:normal; }
+	span.partial_note { color:black; font-style:italic; font-weight:normal; }
+	td.plan.partial, th.plan.partial { background-color: $partial_plan_background_color; }
+	td.budget, th.budget { background-color: $budget_column_background_color; text-align:center; width: 100px; vertical-align:bottom; } 
+	td.diff, th.diff { width: 100px;}
+	tfoot { font-style:italic; border-top:solid 2px #333333;}
+
+	td.envelope, td.group  {
+		a { color:black; }
+		a:hover { color: #0088cc; }
+	}
+}
+
+#budget.allocation_plan_count_0 {
+	th.diff, td.diff { display:none; }
+	th.budget, td.budget { width: 250px; }
+	tr.diff, tr.amount { display:none; }
+}
+
+div.income {
+	cursor:pointer;
+	background-color:#fafafa;
+	border: solid 1px #e5e4e4;
+	border-radius:10px;
+	margin:5px;
+	padding:5px;
+}
+
+#income-total { padding: 5px; }
+
+.income-detail { margin-left: 10px; border-top: solid 1px #e5e4e4;}
